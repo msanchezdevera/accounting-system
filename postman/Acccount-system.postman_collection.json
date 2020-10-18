@@ -1,0 +1,116 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Acccount-system",
+		"_postman_id": "0faea6ab-c3b6-902d-e1f1-d05e306d2865",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "transactions",
+			"request": {
+				"url": "http://localhost:8080/transactions",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "health-check",
+			"request": {
+				"url": "http://localhost:8080/health-check",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "transaction",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8080/transactions/644526dd-740a-4e21-9893-a547fe1f2e97",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transactions",
+						"644526dd-740a-4e21-9893-a547fe1f2e97"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"equals": false,
+							"description": "",
+							"disabled": true
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "transactions",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8080/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transactions"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"equals": false,
+							"description": "",
+							"disabled": true
+						}
+					],
+					"variable": []
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"type\": \"credit\",\n    \"amount\": 123.5\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "accounts",
+			"request": {
+				"url": "http://localhost:8080/accounts",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
