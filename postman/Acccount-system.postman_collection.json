@@ -102,9 +102,9 @@
 			"response": []
 		},
 		{
-			"name": "accounts",
+			"name": "balance",
 			"request": {
-				"url": "http://localhost:8080/accounts",
+				"url": "http://localhost:8080/balance",
 				"method": "GET",
 				"header": [],
 				"body": {},
