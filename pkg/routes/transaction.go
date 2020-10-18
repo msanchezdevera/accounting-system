@@ -24,7 +24,7 @@ func AddTransactionHandler(e *gin.Engine, service transaction2.TransactionServic
 	e.GET("/transactions/:id", handler.Get)
 }
 
-// Create commits a new transaction to the account
+// Create commits a new transaction to the balance
 func (t *transactionHandler) Create(ctx *gin.Context) {
 	if err := context.CheckContentType(ctx); err != nil {
 		ctx.Error(err)

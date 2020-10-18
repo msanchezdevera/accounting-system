@@ -70,13 +70,13 @@ curl -X GET \
   http://localhost:8080/transactions
 ```
 
-### Retrieve current account
+### Retrieve current balance
 
 The response includes the current account balance.
 
 ```
 curl -X GET \
-  http://localhost:8080/accounts
+  http://localhost:8080/balance
 ```
 
 ### Postman

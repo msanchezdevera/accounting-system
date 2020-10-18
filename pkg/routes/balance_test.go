@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"accounting/api/account"
+	"accounting/api/balance"
 	"accounting/pkg/log"
 	mocks2 "accounting/pkg/routes/mocks"
 	"accounting/test_fixture"
@@ -36,7 +36,7 @@ func accountSetUp(t *testing.T) (*gin.Engine, *accountMocks) {
 }
 
 func TestAccountService_Get(t *testing.T) {
-	t.Run("Account - get ok", func(t *testing.T) { account_get_success(t) })
+	t.Run("Balance - get ok", func(t *testing.T) { account_get_success(t) })
 }
 
 func account_get_success(t *testing.T) {
@@ -48,14 +48,14 @@ func account_get_success(t *testing.T) {
 		Return(float64(100)).
 		Times(1)
 
-	request, response := test_fixture.NewRequest("GET", "/accounts", nil)
+	request, response := test_fixture.NewRequest("GET", "/balance", nil)
 
 	router.ServeHTTP(response, request)
 
-	actualResponseBody := account.Account{}
+	actualResponseBody := balance.Balance{}
 	json.NewDecoder(response.Body).Decode(&actualResponseBody)
 
-	expectedResponse := account.Account{Balance: 100}
+	expectedResponse := balance.Balance{Balance: 100}
 
 	assert.Equal(t, 200, response.Code)
 

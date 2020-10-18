@@ -58,7 +58,7 @@ func (ts *transactionService) Create(transactionCreate *transaction.CreateTransa
 	}
 
 	if balance < 0 {
-		return nil, errors.UserError.New("invalid transaction amount due to negative account balance")
+		return nil, errors.UserError.New("invalid transaction amount due to negative balance balance")
 	}
 
 	ts.accountService.UpdateBalance(balance)

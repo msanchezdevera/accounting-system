@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"accounting/api/account"
+	"accounting/api/balance"
 	account2 "accounting/pkg/service/account"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -16,11 +16,11 @@ func AddAccountHandler(e *gin.Engine, service account2.AccountService) {
 		service: service,
 	}
 
-	e.GET("/accounts", handler.GetAccount)
+	e.GET("/balance", handler.GetBalance)
 }
 
-func (b *balanceHandler) GetAccount(ctx *gin.Context) {
-	response := account.Account{
+func (b *balanceHandler) GetBalance(ctx *gin.Context) {
+	response := balance.Balance{
 		Balance: b.service.Balance(),
 	}
 
