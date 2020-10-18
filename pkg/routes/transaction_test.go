@@ -10,6 +10,7 @@ import (
 	"accounting/test_fixture"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -64,11 +65,6 @@ func TestTransactionService_Create(t *testing.T) {
 	t.Run("Create - transaction ok", func(t *testing.T) { transaction_create_success(t) })
 	t.Run("Create - transaction create error", func(t *testing.T) { transactionService_create_serverError(t) })
 	t.Run("Create - transaction create content type error", func(t *testing.T) { transactionService_create_contentTypeError(t) })
-}
-
-func TestTransactionService_Get(t *testing.T) {
-	t.Run("Get - transaction ok", func(t *testing.T) { transaction_create_success(t) })
-	t.Run("Get - transaction create error", func(t *testing.T) { transactionService_create_serverError(t) })
 }
 
 func transaction_create_success(t *testing.T) {
@@ -139,4 +135,81 @@ func transactionService_create_contentTypeError(t *testing.T) {
 
 	assert.Equal(t, 415, response.Code)
 	test_fixture.Diff(t, expectedResponseBody, actualResponseBody)
+}
+
+func TestTransactionService_Get(t *testing.T) {
+	t.Run("Get - transaction ok", func(t *testing.T) { transaction_get_success(t) })
+	t.Run("Get - transaction not found", func(t *testing.T) { transaction_get_notFound(t) })
+}
+
+func transaction_get_success(t *testing.T) {
+	router, mocks := transactionSetUp(t)
+	defer mocks.ctrl.Finish()
+
+	mocks.service.EXPECT().
+		Get(transactionAPI.ID).
+		Return(&transactionModel).
+		Times(1)
+
+	request, response := test_fixture.NewRequest("GET", fmt.Sprintf("/transactions/%s", transactionAPI.ID), nil)
+
+	router.ServeHTTP(response, request)
+
+	actualResponseBody := transaction.Transaction{}
+	json.NewDecoder(response.Body).Decode(&actualResponseBody)
+
+	assert.Equal(t, 200, response.Code)
+
+	test_fixture.Diff(t, transactionAPI, actualResponseBody)
+}
+
+func transaction_get_notFound(t *testing.T) {
+	router, mocks := transactionSetUp(t)
+	defer mocks.ctrl.Finish()
+
+	mocks.service.EXPECT().
+		Get("unknown").
+		Return(nil).
+		Times(1)
+
+	request, response := test_fixture.NewRequest("GET", "/transactions/unknown", nil)
+
+	router.ServeHTTP(response, request)
+
+	expectedResponseBody := apiError.Error{
+		Cause:      "transaction unknown not found",
+		StatusCode: 404,
+	}
+
+	actualResponseBody := apiError.Error{}
+	json.NewDecoder(response.Body).Decode(&actualResponseBody)
+
+	assert.Equal(t, 404, response.Code)
+
+	test_fixture.Diff(t, expectedResponseBody, actualResponseBody)
+}
+
+func TestTransactionService_GetAll(t *testing.T) {
+	t.Run("Get - all transactions ok", func(t *testing.T) { transaction_getAll_success(t) })
+}
+
+func transaction_getAll_success(t *testing.T) {
+	router, mocks := transactionSetUp(t)
+	defer mocks.ctrl.Finish()
+
+	mocks.service.EXPECT().
+		GetAll().
+		Return([]*model.Transaction{&transactionModel}).
+		Times(1)
+
+	request, response := test_fixture.NewRequest("GET", "/transactions", nil)
+
+	router.ServeHTTP(response, request)
+
+	var actualResponseBody []transaction.Transaction
+	json.NewDecoder(response.Body).Decode(&actualResponseBody)
+
+	assert.Equal(t, 200, response.Code)
+
+	test_fixture.Diff(t, []transaction.Transaction{transactionAPI}, actualResponseBody)
 }
