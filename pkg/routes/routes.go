@@ -1,20 +1,19 @@
 package routes
 
 import (
-	"accounting/pkg/model"
 	"accounting/pkg/service"
 	"github.com/gin-gonic/gin"
 )
 
 type HttpRoutes struct {
 	transactionService service.TransactionService
-	account            *model.Account
+	account            service.AccountService
 }
 
-func NewHttpRoutes(transactionService service.TransactionService, account *model.Account) *HttpRoutes {
+func NewHttpRoutes(transactionService service.TransactionService, accountService service.AccountService) *HttpRoutes {
 	return &HttpRoutes{
 		transactionService: transactionService,
-		account:            account,
+		account:            accountService,
 	}
 }
 

@@ -22,9 +22,9 @@ var creditTransaction = &model.Transaction{
 func TestTransactionService(t *testing.T) {
 	transactionStorage := storage.NewTransaction()
 
-	account := model.NewAccount()
+	accountService := NewAccountService()
 
-	service := NewTransactionService(transactionStorage, account, log.NewConfigless())
+	service := NewTransactionService(transactionStorage, accountService, log.NewConfigless())
 
 	response, err := service.Create(creditTransactionAPI)
 	creditTransaction.ID = response.ID

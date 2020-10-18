@@ -3,7 +3,7 @@ package routes
 import (
 	"accounting/api/account"
 	"accounting/pkg/log"
-	"accounting/pkg/model"
+	mocks2 "accounting/pkg/routes/mocks"
 	"accounting/test_fixture"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
@@ -12,22 +12,24 @@ import (
 	"testing"
 )
 
+//go:generate mockgen -destination=mocks/mock_AccountService.go -package=mocks -source=../service/account.go
+
 type accountMocks struct {
-	ctrl    *gomock.Controller
-	account *model.Account
+	ctrl           *gomock.Controller
+	accountService *mocks2.MockAccountService
 }
 
 func (builder *accountMocks) build() *gin.Engine {
 	router := test_fixture.SetupRouter(log.NewConfigless())
-	AddAccountHandler(router, builder.account)
+	AddAccountHandler(router, builder.accountService)
 	return router
 }
 
 func accountSetUp(t *testing.T) (*gin.Engine, *accountMocks) {
 	ctrl := gomock.NewController(t)
 	mocks := &accountMocks{
-		ctrl:    ctrl,
-		account: model.NewAccount(),
+		ctrl:           ctrl,
+		accountService: mocks2.NewMockAccountService(ctrl),
 	}
 
 	return mocks.build(), mocks
@@ -41,7 +43,10 @@ func account_get_success(t *testing.T) {
 	router, mocks := accountSetUp(t)
 	defer mocks.ctrl.Finish()
 
-	mocks.account.UpdateBalance(100)
+	mocks.accountService.EXPECT().
+		Balance().
+		Return(float64(100)).
+		Times(1)
 
 	request, response := test_fixture.NewRequest("GET", "/accounts", nil)
 

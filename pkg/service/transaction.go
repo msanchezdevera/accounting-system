@@ -16,18 +16,18 @@ type TransactionService interface {
 	GetAll() []*model.Transaction
 }
 
-func NewTransactionService(transactionStorage storage.Transaction, account *model.Account, log log.Logger) TransactionService {
+func NewTransactionService(transactionStorage storage.Transaction, accountService AccountService, log log.Logger) TransactionService {
 	return &transactionService{
 		transactionStorage: transactionStorage,
 		log:                log,
-		account:            account,
+		accountService:     accountService,
 	}
 }
 
 type transactionService struct {
 	transactionStorage storage.Transaction
 	log                log.Logger
-	account            *model.Account
+	accountService     AccountService
 }
 
 func (ts *transactionService) Create(transactionCreate *transaction.CreateTransaction) (*model.Transaction, errors.Error) {
@@ -47,8 +47,8 @@ func (ts *transactionService) Create(transactionCreate *transaction.CreateTransa
 		EffectiveDate:   time.Now(),
 	}
 
-	balance := ts.account.LockBalance()
-	defer ts.account.UnlockBalance()
+	balance := ts.accountService.LockBalance()
+	defer ts.accountService.UnlockBalance()
 
 	if transactionModel.TransactionType == model.Credit {
 		balance += transactionModel.Amount
@@ -60,7 +60,7 @@ func (ts *transactionService) Create(transactionCreate *transaction.CreateTransa
 		return nil, errors.UserError.New("invalid transaction amount due to negative account balance")
 	}
 
-	ts.account.UpdateBalance(balance)
+	ts.accountService.UpdateBalance(balance)
 
 	ts.transactionStorage.Create(transactionModel)
 

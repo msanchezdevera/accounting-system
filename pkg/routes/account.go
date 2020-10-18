@@ -2,18 +2,18 @@ package routes
 
 import (
 	"accounting/api/account"
-	"accounting/pkg/model"
+	"accounting/pkg/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 type balanceHandler struct {
-	account *model.Account
+	service service.AccountService
 }
 
-func AddAccountHandler(e *gin.Engine, account *model.Account) {
+func AddAccountHandler(e *gin.Engine, service service.AccountService) {
 	handler := &balanceHandler{
-		account: account,
+		service: service,
 	}
 
 	e.GET("/accounts", handler.GetAccount)
@@ -21,7 +21,7 @@ func AddAccountHandler(e *gin.Engine, account *model.Account) {
 
 func (b *balanceHandler) GetAccount(ctx *gin.Context) {
 	response := account.Account{
-		Balance: b.account.Balance(),
+		Balance: b.service.Balance(),
 	}
 
 	ctx.JSON(http.StatusOK, response)
