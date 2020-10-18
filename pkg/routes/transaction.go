@@ -5,16 +5,16 @@ import (
 	"accounting/pkg/errors"
 	"accounting/pkg/model"
 	"accounting/pkg/server/context"
-	"accounting/pkg/service"
+	transaction2 "accounting/pkg/service/transaction"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 type transactionHandler struct {
-	transactionService service.TransactionService
+	transactionService transaction2.TransactionService
 }
 
-func AddTransactionHandler(e *gin.Engine, service service.TransactionService) {
+func AddTransactionHandler(e *gin.Engine, service transaction2.TransactionService) {
 	handler := &transactionHandler{
 		transactionService: service,
 	}

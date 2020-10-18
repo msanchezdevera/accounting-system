@@ -1,10 +1,11 @@
-package service
+package transaction
 
 import (
 	"accounting/api/transaction"
 	"accounting/pkg/errors"
 	"accounting/pkg/log"
 	"accounting/pkg/model"
+	"accounting/pkg/service/account"
 	"accounting/pkg/storage"
 	"github.com/google/uuid"
 	"time"
@@ -16,7 +17,7 @@ type TransactionService interface {
 	GetAll() []*model.Transaction
 }
 
-func NewTransactionService(transactionStorage storage.Transaction, accountService AccountService, log log.Logger) TransactionService {
+func NewTransactionService(transactionStorage storage.Transaction, accountService account.AccountService, log log.Logger) TransactionService {
 	return &transactionService{
 		transactionStorage: transactionStorage,
 		log:                log,
@@ -27,7 +28,7 @@ func NewTransactionService(transactionStorage storage.Transaction, accountServic
 type transactionService struct {
 	transactionStorage storage.Transaction
 	log                log.Logger
-	accountService     AccountService
+	accountService     account.AccountService
 }
 
 func (ts *transactionService) Create(transactionCreate *transaction.CreateTransaction) (*model.Transaction, errors.Error) {

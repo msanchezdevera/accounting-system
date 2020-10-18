@@ -5,7 +5,8 @@ import (
 	"accounting/pkg/log"
 	"accounting/pkg/routes"
 	"accounting/pkg/server"
-	"accounting/pkg/service"
+	"accounting/pkg/service/account"
+	"accounting/pkg/service/transaction"
 	"accounting/pkg/storage"
 )
 
@@ -20,9 +21,9 @@ func NewApplication(config *config.Configuration, log log.Logger) *Application {
 
 	transactionStorage := storage.NewTransaction()
 
-	accountService := service.NewAccountService()
+	accountService := account.NewAccountService()
 
-	transactionService := service.NewTransactionService(transactionStorage, accountService, log)
+	transactionService := transaction.NewTransactionService(transactionStorage, accountService, log)
 
 	httpRoutes := routes.NewHttpRoutes(transactionService, accountService)
 

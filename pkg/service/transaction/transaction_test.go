@@ -1,9 +1,10 @@
-package service
+package transaction
 
 import (
 	"accounting/api/transaction"
 	"accounting/pkg/log"
 	"accounting/pkg/model"
+	"accounting/pkg/service/account"
 	"accounting/pkg/storage"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -22,7 +23,7 @@ var creditTransaction = &model.Transaction{
 func TestTransactionService(t *testing.T) {
 	transactionStorage := storage.NewTransaction()
 
-	accountService := NewAccountService()
+	accountService := account.NewAccountService()
 
 	service := NewTransactionService(transactionStorage, accountService, log.NewConfigless())
 

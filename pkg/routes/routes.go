@@ -1,16 +1,17 @@
 package routes
 
 import (
-	"accounting/pkg/service"
+	account2 "accounting/pkg/service/account"
+	"accounting/pkg/service/transaction"
 	"github.com/gin-gonic/gin"
 )
 
 type HttpRoutes struct {
-	transactionService service.TransactionService
-	account            service.AccountService
+	transactionService transaction.TransactionService
+	account            account2.AccountService
 }
 
-func NewHttpRoutes(transactionService service.TransactionService, accountService service.AccountService) *HttpRoutes {
+func NewHttpRoutes(transactionService transaction.TransactionService, accountService account2.AccountService) *HttpRoutes {
 	return &HttpRoutes{
 		transactionService: transactionService,
 		account:            accountService,

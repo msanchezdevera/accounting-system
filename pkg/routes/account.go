@@ -2,16 +2,16 @@ package routes
 
 import (
 	"accounting/api/account"
-	"accounting/pkg/service"
+	account2 "accounting/pkg/service/account"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 type balanceHandler struct {
-	service service.AccountService
+	service account2.AccountService
 }
 
-func AddAccountHandler(e *gin.Engine, service service.AccountService) {
+func AddAccountHandler(e *gin.Engine, service account2.AccountService) {
 	handler := &balanceHandler{
 		service: service,
 	}
